@@ -1,4 +1,14 @@
-**This work was supported by the European Union’s Horizon 2020 research and innovation programme HORIZON-CL6–2021-BIODIV-01–12 under grant agreement No 101059407 “MarinePlan – Improved transdisciplinary science for effective ecosystem-based maritime spatial planning and conservation in European Seas”.**
+<!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/prior3D)](https://CRAN.R-project.org/package=prior3D)
+[![Developmental version](https://img.shields.io/badge/devel%20version-0.1.1-blue.svg)](https://github.com/cadam00/prior3D)
+  [![R-CMD-check](https://github.com/cadam00/prior3D/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cadam00/prior3D/actions/workflows/R-CMD-check.yaml)
+  <!-- badges: end -->
+
+**This work was conducted at the Department of Marine Sciences, University of
+the Aegean, Greece, supported by the European Union’s Horizon 2020 research and
+innovation programme HORIZON-CL6–2021-BIODIV-01–12 under grant agreement No
+101059407, “MarinePlan – Improved transdisciplinary science for effective
+ecosystem-based maritime spatial planning and conservation in European Seas”.**
 
 ## 1 **Introduction to the prior3D Package (tutorial)**
 
@@ -21,7 +31,9 @@ commercial and open-source exact algorithm solvers that ensure optimal solutions
 to prioritization problems.
 
 <p align="center">
-  <img src="fig1.jpg" alt="Flow chart of the 3D prioritization analysis for the four depth zones considered in the @doxa20224d analysis" width="100%" />
+  <img src="man/figures/fig1.jpg"
+  alt="Figure 1: Flow chart of the 3D prioritization analysis for the four depth
+  zones considered in the @doxa20224d analysis" width="100%" />
 </p>
 <p class="caption" align="center">
 <span id="fig-Figure1"></span>Figure 1: Flow chart of the 3D
@@ -73,10 +85,14 @@ a post-processing analysis, which can be conducted after either the
 step-by-step or the comparative analysis. The necessary functions for
 this assessment are also provided within the package.
 
-## 3 Installation
+## 3 **Installation**
 
 All the functions of the package prior3D can be installed in R via:
+``` r
+install.packages("prior3D")
+```
 
+Alternatively, development version of the package can be installed using:
 ``` r
 if (!require(remotes)) install.packages("remotes")
 remotes::install_github("cadam00/prior3D")
@@ -160,7 +176,8 @@ the lower limit of photophilic algae and seagrasses), (ii) 40 to 200 m
 and abyssal zone) (Figure [2](#fig-Figure2)).
 
 <p align="center">
-  <img src="fig2.jpg" alt="The study area and the considered depth zones" width="50%" />
+  <img src="man/figures/fig2.jpg"
+  alt="Figure 2: The study area and the considered depth zones" width="50%" />
 </p>
 <p class="caption" align="center">
 <span id="fig-Figure2"></span>Figure 2: The study area and the
@@ -246,7 +263,7 @@ reflects the desired level of protection to be modeled. It ranges from 0
 to 1, with 0 indicating no resources available for protection, while 1
 signifies resources sufficient to protect the entire study area.
 Typically, setting a budget of 0.3 corresponds to the 30% conservation
-target (i.e. 30% of the total area set aside for conservation). Users
+target (i.e. 30% of the total area set aside for conservation). Users
 also have the flexibility to define multiple budget levels using a
 vector, allowing for the exploration of various protection scenarios.
 For instance, a vector like `c(0.1, 0.3, 0.5)` represents three
@@ -281,7 +298,9 @@ different approach, it resembles to typical Zonation output maps.
 
 
 <p align="center">
-  <img src="fig3.jpg" width="100%" style="display: block; margin: auto;" />
+  <img src="man/figures/fig3.jpg"
+  alt="Figure 3: Prioritization maps for single and multiple budget percentages"
+  width="100%" style="display: block; margin: auto;" />
 </p>
 <p class="caption" align="center">
 <span id="fig-Figure3"></span>Figure 3: Prioritization maps for single and
@@ -294,7 +313,9 @@ plot_3D(single_3D, to_plot="all", add_lines=FALSE)
 ```
 
 <p align="center">
-  <img src="fig4.jpg" alt="Output for 30% budget percentage" width="60%" />
+  <img src="man/figures/fig4.jpg"
+  alt="Figure 4: Output for 30% budget percentage"
+  width="60%" />
 </p>
 <p class="caption" align="center">
 <span id="fig-Figure4"></span>Figure 4: Output for 30% budget percentage
@@ -347,7 +368,9 @@ plot_3D(multuple_3D)
 ```
 
 <p align="center">
-  <img src="fig5.jpg" alt="Output for multiple budget percentages" width="75%" />
+  <img src="man/figures/fig5.jpg"
+  alt="Figure 5: Output for multiple budget percentages"
+  width="75%" />
 </p>
 <p class="caption" align="center">
 <span id="fig-Figure5"></span>Figure 5: Output for multiple budget
@@ -375,11 +398,14 @@ out_2D_3D <- Compare_2D_3D(biodiv_raster = biodiv_raster,
                            portfolio = "gap", #"shuffle"
                            portfolio_opts = list(number_solutions = 10))
 
-plot_Compare_2D_3D(out_2D_3D, to_plot="all", add_lines=FALSE)
+plot_Compare_2D_3D(out_2D_3D, to_plot="all", add_lines=TRUE)
 ```
 
 <p align="center">
-  <img src="fig6.jpg" alt="Comparison of 2D vs 3D approach for multiple budget percentages" width="75%" />
+  <img src="man/figures/fig6.jpg"
+  alt="Figure 6: Comparison of 2D vs 3D approach for multiple budget
+  percentages"
+  width="75%" />
 </p>
 <p class="caption" align="center">
 <span id="fig-Figure6"></span>Figure 6: Comparison of 2D vs 3D approach
@@ -420,7 +446,7 @@ coherence(out_2D_3D, w=3)
 ```
 
 <p align="center">
-  <img src="sa.jpg" alt="SA" width="75%" />
+  <img src="man/figures/sa.jpg" alt="Figure 7: SA" width="75%" />
 </p>
 <p class="caption" align="center">
 <span id="fig-Figure7"></span>Figure 7: SA
@@ -438,7 +464,7 @@ coherence(out_2D_3D, w=3, metric="sku")
 ```
 
 <p align="center">
-  <img src="sku.jpg" alt="SKU" width="75%" />
+  <img src="man/figures/sku.jpg" alt="Figure 8: SKU" width="75%" />
 </p>
 <p class="caption" align="center">
 <span id="fig-Figure8"></span>Figure 8: SKU
@@ -543,7 +569,7 @@ coherence(out_2D_3D, w=3, metric="rao")
 ##   Input data are float numbers. Converting data to integer matrices.
 ```
 <p align="center">
-  <img src="rao.jpg" alt="RAO" width="75%" />
+  <img src="man/figures/rao.jpg" alt="Figure 9: RAO" width="75%" />
 </p>
 <p class="caption" align="center">
 <span id="fig-Figure9"></span>Figure 9: RAO
