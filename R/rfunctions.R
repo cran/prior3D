@@ -691,7 +691,7 @@ plot_3D <- function(x, to_plot="all", add_lines=TRUE){
     if (attr(x, "from.function") == "prioritize_3D"){
       if (to_plot=="all"){
         if (length(x$budget_percent) > 1){
-          cols <- rev(viridis::viridis(length(x$depth_levels_names)))
+          cols <- rev(viridis(length(x$depth_levels_names)))
           layout(mat = matrix(c(1,2,3),nrow = 3,ncol = 1, byrow = TRUE),
                  heights = c(0.4, 0.4, 0.2))
           plot(classify(sumrast(x$solution3D), c(0, 0.5, 0.6, 0.7, 0.8, 0.9, 1),
@@ -713,7 +713,7 @@ plot_3D <- function(x, to_plot="all", add_lines=TRUE){
                  col=cols, lwd=3, lty=1, cex=1.1, box.col = NA, horiz = TRUE)
           layout(mat = matrix(1))
         } else {
-          cols <- rev(viridis::viridis(length(x$depth_levels_names)))
+          cols <- rev(viridis(length(x$depth_levels_names)))
           layout(mat = matrix(c(1,2),nrow = 2,ncol = 1, byrow = TRUE))
           plot(x$solution3D[[1]], main="3D\nSum plot",
                col = rev(terrain.colors(255)))
@@ -741,7 +741,7 @@ plot_3D <- function(x, to_plot="all", add_lines=TRUE){
 
       } else if (to_plot == "relative_held"){
         if (length(x$budget_percent) > 1){
-          cols <- rev(viridis::viridis(length(x$depth_levels_names)))
+          cols <- rev(viridis(length(x$depth_levels_names)))
           layout(mat = matrix(c(1,2),nrow = 2,ncol = 1,byrow = TRUE),
                  heights = c(0.7, 0.3))
           matplot(x$budget_percent, x$relative_helds3D, type="l", col=cols,
@@ -776,7 +776,7 @@ plot_Compare_2D_3D <- function(x, to_plot="all", add_lines=TRUE){
     if (attr(x, "from.function") == "Compare_2D_3D"){
       if (to_plot=="all"){
         if (length(x$budget_percent) > 1){
-          cols <- rev(viridis::viridis(length(x$depth_levels_names)))
+          cols <- rev(viridis(length(x$depth_levels_names)))
           layout(mat = matrix(c(1,2,3, 4, 5, 5),nrow = 3,ncol = 2,byrow = TRUE),
                  heights = c(0.4, 0.4, 0.2))
           plot(classify(sumrast(x$solution2D), c(0, 0.5, 0.6, 0.7, 0.8, 0.9, 1),
@@ -814,7 +814,7 @@ plot_Compare_2D_3D <- function(x, to_plot="all", add_lines=TRUE){
                  col=cols, lwd=3, lty=1, cex=1.1, box.col = NA, horiz = TRUE)
           layout(mat = matrix(1))
         } else {
-          cols <- rev(viridis::viridis(length(x$depth_levels_names)))
+          cols <- rev(viridis(length(x$depth_levels_names)))
           layout(mat = matrix(c(1,2, 3, 4),nrow = 2,ncol = 2,byrow = TRUE),
                  heights = c(0.4, 0.4, 0.2))
           plot(x$solution2D[[1]], main="2D\n\nSum plot",
@@ -859,7 +859,7 @@ plot_Compare_2D_3D <- function(x, to_plot="all", add_lines=TRUE){
 
       } else if (to_plot == "relative_held"){
         if (length(x$budget_percent) > 1){
-          cols <- rev(viridis::viridis(length(x$depth_levels_names)))
+          cols <- rev(viridis(length(x$depth_levels_names)))
           layout(mat = matrix(c(1,2, 3, 3),nrow = 2,ncol = 2,byrow = TRUE),
                  heights = c(0.7, 0.3))
           ylim <- c(min(x$relative_helds2D, x$relative_helds3D),
@@ -1071,7 +1071,8 @@ Compare_2D_3D <- function(biodiv_raster,
   }
   pu_rast <- terra::mask(pu_rast, depth_raster)
   length_budget_percents <- length(budget_percents)
-  absolute_held3D <- absolute_held2D <- NULL
+  absolute_held3D <- absolute_held2D <-
+    overall_available2D <- overall_available3D <- NULL
   relative_helds3D <- relative_helds2D <- depth_overall_available3D <-
     depth_overall_available2D <-
     matrix(nrow=length_budget_percents, ncol=n_depths)
@@ -1103,6 +1104,7 @@ Compare_2D_3D <- function(biodiv_raster,
     bar3D <- evaluate_3D(solution3D[[i]], rev_split_features)
     relative_helds3D[i,] <- bar3D$relative_held
     absolute_held3D[[i]] <- bar3D$absolute_held
+    overall_available3D[[i]] <- bar3D$overall_available
     overall_held3D[i,] <- bar3D$overall_held
     mean_overall_helds3D[i] <- mean(bar3D$overall_held, na.rm=TRUE)
     sd_overall_helds3D[i] <- sd(bar3D$overall_held, na.rm=TRUE)
@@ -1126,6 +1128,7 @@ Compare_2D_3D <- function(biodiv_raster,
     bar2D <- evaluate_3D(solution2D[[i]], rev_split_features)
     relative_helds2D[i,] <- bar2D$relative_held
     absolute_held2D[[i]] <- bar2D$absolute_held
+    overall_available2D[[i]] <- bar2D$overall_available
     overall_held2D[i,] <- bar2D$overall_held
     mean_overall_helds2D[i] <- mean(bar2D$overall_held, na.rm=TRUE)
     sd_overall_helds2D[i] <- sd(bar2D$overall_held, na.rm=TRUE)
@@ -1144,12 +1147,14 @@ Compare_2D_3D <- function(biodiv_raster,
   relative_helds3D <- relative_helds3D[,n_depths:1]
   absolute_held2D <- lapply(absolute_held2D, function(x)x[,n_depths:1])
   absolute_held3D <- lapply(absolute_held3D, function(x)x[,n_depths:1])
-
+  overall_available2D <- lapply(overall_available2D, function(x)x[,n_depths:1])
+  overall_available3D <- lapply(overall_available3D, function(x)x[,n_depths:1])
   total_amount <- bar3D$total_amount[,n_depths:1]
   overall_total_amount <- base::rowSums(total_amount, na.rm=TRUE)
 
   names_features <- names(split_features[[1]])
   depth_levels_names <- levels(cut(0, breaks = breaks, include.lowest = TRUE))
+  rev_depth_levels_names <- rev(depth_levels_names)
 
   colnames(overall_held3D) <- colnames(overall_held2D) <-
     rownames(total_amount) <-
@@ -1157,6 +1162,8 @@ Compare_2D_3D <- function(biodiv_raster,
     names_features
 
   names(solution3D) <- names(solution2D) <-
+    names(absolute_held2D) <- names(absolute_held3D) <-
+    names(overall_available2D) <- names(overall_available3D) <-
     rownames(overall_held3D) <- rownames(overall_held2D) <-
     names(mean_overall_helds3D) <- names(mean_overall_helds2D) <-
     names(jaccard_coef) <-
@@ -1164,7 +1171,7 @@ Compare_2D_3D <- function(biodiv_raster,
 
   colnames(total_amount) <-
     names(split_features) <-
-    depth_levels_names
+    rev_depth_levels_names
 
   if (length_budget_percents > 1){
     names(sd_overall_helds3D) <- names(sd_overall_helds2D) <-
@@ -1176,35 +1183,55 @@ Compare_2D_3D <- function(biodiv_raster,
     colnames(depth_overall_available3D) <-
       colnames(depth_overall_available2D) <-
       colnames(relative_helds3D) <- colnames(relative_helds2D) <-
-      depth_levels_names
+      rev_depth_levels_names
 
   } else {
     names(depth_overall_available3D) <- names(depth_overall_available2D) <-
       names(relative_helds3D) <- names(relative_helds2D) <-
-      depth_levels_names
+    rev_depth_levels_names
   }
 
   absolute_held2D <- lapply(absolute_held2D,
-                            function(x, depth_levels_names, names_features){
-                              colnames(x) <- depth_levels_names
+                            function(x, rev_depth_levels_names, names_features){
+                              colnames(x) <- rev_depth_levels_names
                               rownames(x) <- names_features
+                              return(x)
                             },
-  depth_levels_names=depth_levels_names,
+  rev_depth_levels_names=rev_depth_levels_names,
   names_features = names_features)
 
   absolute_held3D <- lapply(absolute_held3D,
-                            function(x, depth_levels_names, names_features){
-                              colnames(x) <- depth_levels_names
+                            function(x, rev_depth_levels_names, names_features){
+                              colnames(x) <- rev_depth_levels_names
                               rownames(x) <- names_features
+                              return(x)
                             },
-  depth_levels_names=depth_levels_names,
+  rev_depth_levels_names=rev_depth_levels_names,
   names_features = names_features)
 
+  overall_available2D <- lapply(overall_available2D,
+                            function(x, rev_depth_levels_names, names_features){
+                              colnames(x) <- rev_depth_levels_names
+                              rownames(x) <- names_features
+                              return(x)
+                            },
+                            rev_depth_levels_names=rev_depth_levels_names,
+                            names_features = names_features)
+
+  overall_available3D <- lapply(overall_available3D,
+                            function(x, rev_depth_levels_names, names_features){
+                              colnames(x) <- rev_depth_levels_names
+                              rownames(x) <- names_features
+                              return(x)
+                            },
+                            rev_depth_levels_names=rev_depth_levels_names,
+                            names_features = names_features)
 
   output <- list(
     split_features=split_features,
     solution3D=solution3D,
     absolute_held3D=absolute_held3D,
+    overall_available3D=overall_available3D,
     overall_held3D=overall_held3D,
     relative_helds3D=relative_helds3D,
     mean_overall_helds3D=mean_overall_helds3D,
@@ -1212,6 +1239,7 @@ Compare_2D_3D <- function(biodiv_raster,
     depth_overall_available3D = depth_overall_available3D,
     solution2D=solution2D,
     absolute_held2D=absolute_held2D,
+    overall_available2D=overall_available2D,
     overall_held2D=overall_held2D,
     relative_helds2D=relative_helds2D,
     mean_overall_helds2D=mean_overall_helds2D,
@@ -1410,7 +1438,7 @@ prioritize_3D <- function(split_features,
   }
   pu_rast <- terra::mask(pu_rast, depth_raster)
   length_budget_percents <- length(budget_percents)
-  absolute_held3D <- NULL
+  absolute_held3D <- overall_available3D <- NULL
   relative_helds3D <- depth_overall_available3D <-
     matrix(nrow=length_budget_percents, ncol=n_depths)
   mean_overall_helds3D <- sd_overall_helds3D <- numeric(length_budget_percents)
@@ -1439,6 +1467,7 @@ prioritize_3D <- function(split_features,
     bar3D <- evaluate_3D(solution3D[[i]], rev_split_features)
     relative_helds3D[i,] <- bar3D$relative_held
     absolute_held3D[[i]] <- bar3D$absolute_held
+    overall_available3D[[i]] <- bar3D$overall_available
     overall_held3D[i,] <- bar3D$overall_held
     mean_overall_helds3D[i] <- mean(bar3D$overall_held, na.rm=TRUE)
     sd_overall_helds3D[i] <- sd(bar3D$overall_held, na.rm=TRUE)
@@ -1450,12 +1479,14 @@ prioritize_3D <- function(split_features,
   depth_overall_available3D <- depth_overall_available3D[,n_depths:1]
   relative_helds3D <- relative_helds3D[,n_depths:1]
   absolute_held3D <- lapply(absolute_held3D, function(x)x[,n_depths:1])
+  overall_available3D <- lapply(overall_available3D, function(x)x[,n_depths:1])
 
   total_amount <- bar3D$total_amount[,n_depths:1]
   overall_total_amount <- base::rowSums(total_amount, na.rm=TRUE)
 
   names_features <- names(split_features[[1]])
   depth_levels_names <- levels(cut(0, breaks = breaks, include.lowest = TRUE))
+  rev_depth_levels_names <- rev(depth_levels_names)
 
   colnames(overall_held3D) <-
     rownames(total_amount) <-
@@ -1469,7 +1500,7 @@ prioritize_3D <- function(split_features,
 
   colnames(total_amount) <-
     names(split_features) <-
-    depth_levels_names
+    rev_depth_levels_names
 
   if (length_budget_percents > 1){
     names(sd_overall_helds3D) <-
@@ -1479,27 +1510,37 @@ prioritize_3D <- function(split_features,
 
     colnames(depth_overall_available3D) <-
       colnames(relative_helds3D) <-
-      depth_levels_names
+      rev_depth_levels_names
 
   } else {
     names(depth_overall_available3D) <-
       names(relative_helds3D) <-
-      depth_levels_names
+      rev_depth_levels_names
   }
 
   absolute_held3D <- lapply(absolute_held3D,
-                            function(x, depth_levels_names, names_features){
-                              colnames(x) <- depth_levels_names
+                            function(x, rev_depth_levels_names, names_features){
+                              colnames(x) <- rev_depth_levels_names
                               rownames(x) <- names_features
+                              return(x)
                             },
-  depth_levels_names=depth_levels_names,
+  rev_depth_levels_names=rev_depth_levels_names,
   names_features = names_features)
 
+  overall_available3D <- lapply(overall_available3D,
+                            function(x, rev_depth_levels_names, names_features){
+                              colnames(x) <- rev_depth_levels_names
+                              rownames(x) <- names_features
+                              return(x)
+                            },
+                            rev_depth_levels_names=rev_depth_levels_names,
+                            names_features = names_features)
 
   output <- list(
     split_features=split_features,
     solution3D=solution3D,
     absolute_held3D=absolute_held3D,
+    overall_available3D=overall_available3D,
     overall_held3D=overall_held3D,
     relative_helds3D=relative_helds3D,
     mean_overall_helds3D=mean_overall_helds3D,
