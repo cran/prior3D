@@ -1,12 +1,13 @@
 Package: prior3D
 Type: Package
 Title: 3D Prioritization Algorithm
-Version: 0.1.3
+Version: 0.1.5
 Authors@R: c(person("Aggeliki", "Doxa", role = "aut",
              email = "aggeliki.doxa@uoc.gr",
              comment = c(ORCID = "0000-0003-4279-1499")),
              person("Christos", "Adam", role = c("aut", "cre"),
-             email = "econp266@econ.soc.uoc.gr"),
+             email = "econp266@econ.soc.uoc.gr",
+             comment = c(ORCID = "0009-0003-3244-7034")),
              person("Nikolaos", "Nagkoulis", role = "aut",
              email = "nikolaosn@civil.auth.gr",
              comment = c(ORCID = "0000-0002-1900-2634")),
@@ -23,7 +24,7 @@ Description: Three-dimensional systematic conservation planning, conducting
              ensuring efficient resource allocation throughout the water column.
              It provides a structured workflow designed to address biodiversity
              conservation and management challenges in the 3 dimensions, while
-             facilitating users’ choices and parameterization (Doxa et al. 2024
+             facilitating users’ choices and parameterization (Doxa et al. 2025
              <doi:10.1016/j.ecolmodel.2024.110919>).
 License: GPL-3
 Encoding: UTF-8
@@ -38,13 +39,13 @@ RoxygenNote: 7.3.2
 Suggests: knitr, rmarkdown, testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr, rmarkdown
-Depends: R (>= 2.10)
+Depends: R (>= 4.1.0)
 NeedsCompilation: no
-Packaged: 2024-11-15 12:43:14 UTC; Administrator
+Packaged: 2025-01-25 07:42:27 UTC; Administrator
 Author: Aggeliki Doxa [aut] (<https://orcid.org/0000-0003-4279-1499>),
-  Christos Adam [aut, cre],
+  Christos Adam [aut, cre] (<https://orcid.org/0009-0003-3244-7034>),
   Nikolaos Nagkoulis [aut] (<https://orcid.org/0000-0002-1900-2634>),
   Antonios D. Mazaris [aut] (<https://orcid.org/0000-0002-4961-5490>),
   Stelios Katsanevakis [aut] (<https://orcid.org/0000-0002-5137-7540>)
 Repository: CRAN
-Date/Publication: 2024-11-15 13:00:06 UTC
+Date/Publication: 2025-01-25 08:10:01 UTC
